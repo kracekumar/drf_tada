@@ -3,6 +3,9 @@
 import wrapt
 import inspect
 
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.response import Response
+
 
 @wrapt.decorator
 def set_init_args(wrapped, instance, args, kwargs):
@@ -47,3 +50,11 @@ def _check_attrs(passed_on_attrs, defined_attrs):
         msg = u"__init__() got an unexpected keyword argument {}".format(
             list(missing_attrs or extra_attrs))
         raise TypeError(msg)
+
+
+@wrapt.decorator
+def handle_doesnt_exists_exception(wrapped, instance, args, kwargs):
+    try:
+        return wrapped(*args, **kwargs)
+    except ObjectDoesNotExist:
+        return Response(status=404)
