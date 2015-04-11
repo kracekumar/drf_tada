@@ -28,6 +28,6 @@ class TodoBucketListEntity:
         data = {}
 
         data['meta'] = self.meta
-        data['object'] = [obj.to_dict() for obj in self.objects]
+        data['objects'] = [obj.to_dict() for obj in self.objects]
 
         return data
