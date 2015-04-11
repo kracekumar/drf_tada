@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from user.views import (UserDetailApiView, UserListApiView,
                         UserChangePasswordApiView)
-from todo.views import (TodoBucketListApiView)
+from todo.views import (TodoBucketListApiView, TodoBucketDetailApiView)
 
 
 admin.autodiscover()
@@ -20,4 +20,6 @@ urlpatterns = patterns('',
     url(r'^users/(?P<pk>[0-9]+)/$', UserDetailApiView.as_view(), name='user-detail'),
     url(r'^todo_bucket/$', TodoBucketListApiView.as_view(),
         name='todo-bucket-list'),
+    url(r'^todo_bucket/(?P<pk>[0-9]+)/$', TodoBucketDetailApiView.as_view(),
+        name='todo-bucket-detail'),
 )

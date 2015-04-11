@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.permissions import BasePermission
 
+def can_access(todo_bucket_entity, user_id=None):
+    if todo_bucket_entity.is_public is True:
+        return True
 
-class TodoBucketPermission(BasePermission):
-    def has_permission(self, request, view):
-        return request.user.id == int(view.kwargs.get('pk', -1))
+    return todo_bucket_entity.created_by == user_id

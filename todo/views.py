@@ -9,11 +9,12 @@ from rest_framework.response import Response
 
 from commons.decorators import handle_doesnt_exists_exception
 from commons.permissions import LoggedInPermission
+from commons.response import make_response
+
 from interactors import todo_bucket_interactors
 
 # current app imports
 from .todo_bucket_entity import TodoBucketEntity
-#from .permissions import UserPermission
 from .serializers import (TodoBucketWriteSerializer, TodoBucketReadSerializer,
                           TodoBucketUpdateSerializer)
 
@@ -34,29 +35,23 @@ class TodoBucketListApiView(views.APIView):
 
             resp = todo_bucket_interactors.create(
                 todo_bucket_entity=todo_bucket_entity)
-            if resp.is_success:
-                serialize_resp = TodoBucketReadSerializer(
-                    instance=resp.instance)
-                return Response(status=status.HTTP_201_CREATED,
-                                data=serialize_resp.data)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST,
-                                data=resp.errors)
+            return make_response(obj=resp,
+                                 serializer_cls=TodoBucketReadSerializer)
 
         return Response(status=status.HTTP_400_BAD_REQUEST,
                         data=obj.errors)
 
-# class UserDetailApiView(views.APIView):
-#     allowed_methods = ['GET', 'PATCH']
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = [UserPermission]
 
-#     def get(self, request, pk):
-#         user_entity = user_interactors.get(pk=pk)
-#         if user_entity:
-#             serialized_obj = UserReadSerializer(instance=user_entity)
-#             return Response(data=serialized_obj.data)
-#         return Response(status=status.HTTP_404_NOT_FOUND)
+class TodoBucketDetailApiView(views.APIView):
+    allowed_methods = ['GET', 'PATCH']
+    authentication_classes = [TokenAuthentication]
+
+    @handle_doesnt_exists_exception
+    def get(self, request, pk):
+        entity = todo_bucket_interactors.get(pk=pk,
+                                             user_id=request.user.id)
+        return make_response(obj=entity,
+                             serializer_cls=TodoBucketReadSerializer)
 
 #     @handle_doesnt_exists_exception
 #     def patch(self, request, pk):

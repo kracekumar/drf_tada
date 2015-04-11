@@ -18,8 +18,9 @@ class TodoBucketReadSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=30, required=True)
     description = serializers.CharField(default='')
     is_public = serializers.BooleanField(default=False)
-    created = serializers.DateTimeField()
-    modified = serializers.DateTimeField()
+    created_by = serializers.IntegerField()
+    created = serializers.DateTimeField(format="%s")
+    modified = serializers.DateTimeField(format="%s")
 
 
 class TodoBucketWriteSerializer(serializers.Serializer):
