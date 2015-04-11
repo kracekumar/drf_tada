@@ -2,33 +2,30 @@
 
 from rest_framework import serializers
 
-from commons.serializers import TimeStampedSerializerMixin
-from commons.fields import ResourceUriField
+from commons.serializers import TimeStampedSerializerMixin, MetaDataSerializer
 
 
-class BaseTodoBucketSerializerMixin(object):
+class BaseTodoBucketSerializerMixin(serializers.Serializer):
     """Mixin with common fields for TodoBucket"""
     title = serializers.CharField(max_length=30, required=True)
     description = serializers.CharField(default='')
     is_public = serializers.BooleanField(default=False)
 
 
-class TodoBucketReadSerializer(serializers.Serializer):
+class TodoBucketReadSerializer(BaseTodoBucketSerializerMixin,
+                               TimeStampedSerializerMixin):
     id = serializers.IntegerField(source='pk')
-    title = serializers.CharField(max_length=30, required=True)
-    description = serializers.CharField(default='')
-    is_public = serializers.BooleanField(default=False)
     created_by = serializers.IntegerField()
-    created = serializers.DateTimeField(format="%s")
-    modified = serializers.DateTimeField(format="%s")
 
 
-class TodoBucketWriteSerializer(serializers.Serializer):
+class TodoBucketWriteSerializer(BaseTodoBucketSerializerMixin):
     """TodoBucket serializer used during create"""
-    title = serializers.CharField(max_length=30, required=True)
-    description = serializers.CharField(default='')
-    is_public = serializers.BooleanField(default=False)
 
 
-class TodoBucketUpdateSerializer(serializers.Serializer):
+class TodoBucketUpdateSerializer(BaseTodoBucketSerializerMixin):
     pass
+
+
+class TodoBucketListSerializer(serializers.Serializer):
+    meta = MetaDataSerializer()
+    objects = TodoBucketReadSerializer(many=True)

@@ -50,6 +50,8 @@ class BusinessAction(Enum):
     RESOURCE_DELETED = 'resource_deleted'
     RESOURCE_READ = 'resource_read'
     RESOURCE_ACCESS_DENIED = 'resource_access_denied'
+    RESOURCE_NOT_FOUND = 'resource_not_found'
+    BAD_DATA = 'bad_data'
 
 
 resource_status_mapping = {
@@ -57,23 +59,26 @@ resource_status_mapping = {
     BusinessAction.RESOURCE_DELETED: status.HTTP_204_NO_CONTENT,
     BusinessAction.RESOURCE_UPDATED: status.HTTP_202_ACCEPTED,
     BusinessAction.RESOURCE_READ: status.HTTP_200_OK,
-    BusinessAction.RESOURCE_ACCESS_DENIED: status.HTTP_403_FORBIDDEN}
+    BusinessAction.RESOURCE_ACCESS_DENIED: status.HTTP_403_FORBIDDEN,
+    BusinessAction.BAD_DATA: status.HTTP_400_BAD_REQUEST}
 
 
 # helper/internal functions
 def _make_response_from_business_response(obj, serializer_cls):
     assert serializer_cls
 
+    _status = resource_status_mapping.get(obj.action)
+
     if obj.is_success:
+        if not obj.instance:
+            return Response(status=_status)
+
         instance = serializer_cls(instance=obj.instance)
-        _status = resource_status_mapping.get(obj.action,
-                                              status.HTTP_200_OK)
         return Response(status=_status, data=instance.data)
     else:
         if obj.action == BusinessAction.RESOURCE_ACCESS_DENIED:
-            return Response(status=resource_status_mapping.get(obj.action))
-        return Response(status=status.HTTP_400_BAD_REQUEST,
-                        data=obj.errors)
+            return Response(status=_status)
+        return Response(status=_status, data=obj.errors)
 
 
 def _make_response_from_serializer(obj):

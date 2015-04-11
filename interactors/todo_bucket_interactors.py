@@ -24,3 +24,21 @@ def get(pk, user_id=None):
         instance = BusinessResponse(
             is_success=False, action=BusinessAction.RESOURCE_ACCESS_DENIED)
     return instance
+
+
+def delete(pk, user_id=None):
+    entity = todo_bucket_service.get(pk=pk)
+    if permissions.can_delete(todo_bucket_entity=entity, user_id=user_id):
+        todo_bucket_service.delete(pk=pk)
+        return BusinessResponse(is_success=True,
+                                action=BusinessAction.RESOURCE_DELETED)
+    return BusinessResponse(is_success=False,
+                            action=BusinessAction.RESOURCE_ACCESS_DENIED)
+
+
+def get_objects(user_id, limit=20, offset=0):
+    entity = todo_bucket_service.get_objects(user_id=user_id,
+                                             limit=limit, offset=offset)
+    return BusinessResponse(is_success=True,
+                            action=BusinessAction.RESOURCE_READ,
+                            instance=entity)

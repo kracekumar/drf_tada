@@ -12,3 +12,5 @@ def create(title, description, owner_id, is_public):
 
 
 get = partial(base_repo.get, model=TodoBucket)
+count = partial(base_repo.count, model=TodoBucket)
+get_objects = partial(base_repo.filter, model=TodoBucket)

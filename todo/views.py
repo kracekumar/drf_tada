@@ -10,17 +10,17 @@ from rest_framework.response import Response
 from commons.decorators import handle_doesnt_exists_exception
 from commons.permissions import LoggedInPermission
 from commons.response import make_response
+from commons.serializers import ListQueryParamsSerializer
 
 from interactors import todo_bucket_interactors
 
 # current app imports
 from .todo_bucket_entity import TodoBucketEntity
 from .serializers import (TodoBucketWriteSerializer, TodoBucketReadSerializer,
-                          TodoBucketUpdateSerializer)
+                          TodoBucketUpdateSerializer, TodoBucketListSerializer)
 
 
 class TodoBucketListApiView(views.APIView):
-    allowed_methods = ['GET', 'POST']
     authentication_classes = [TokenAuthentication]
     permission_classes = [LoggedInPermission]
 
@@ -41,9 +41,22 @@ class TodoBucketListApiView(views.APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST,
                         data=obj.errors)
 
+    def get(self, request):
+        param_serializer = ListQueryParamsSerializer(data=request.QUERY_PARAMS)
+        user_id = request.user.id
+        if param_serializer.is_valid():
+            limit = param_serializer.data['limit']
+            offset = param_serializer.data['offset']
+            obj = todo_bucket_interactors.get_objects(
+                limit=limit, offset=offset, user_id=user_id)
+            return make_response(obj=obj,
+                                 serializer_cls=TodoBucketListSerializer)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST,
+                        data=param_serializer.errors)
+
 
 class TodoBucketDetailApiView(views.APIView):
-    allowed_methods = ['GET', 'PATCH']
     authentication_classes = [TokenAuthentication]
 
     @handle_doesnt_exists_exception
@@ -52,6 +65,12 @@ class TodoBucketDetailApiView(views.APIView):
                                              user_id=request.user.id)
         return make_response(obj=entity,
                              serializer_cls=TodoBucketReadSerializer)
+
+    @handle_doesnt_exists_exception
+    def delete(self, request, pk):
+        entity = todo_bucket_interactors.delete(pk=pk,
+                                                user_id=request.user.id)
+        return make_response(obj=entity)
 
 #     @handle_doesnt_exists_exception
 #     def patch(self, request, pk):
@@ -69,21 +88,3 @@ class TodoBucketDetailApiView(views.APIView):
 #                             data=resp_obj.data)
 #         return Response(status=status.HTTP_400_BAD_REQUEST,
 #                         data=obj.errors)
-
-
-# class UserChangePasswordApiView(views.APIView):
-#     allowed_methods = ['POST']
-#     permission_classes = [UserPermission]
-#     authentication_classes = [TokenAuthentication]
-
-#     def post(self, request, pk):
-#         obj = UserPasswordSerializer(data=request.DATA)
-#         if obj.is_valid():
-#             user_interactors.set_password(user_id=pk,
-#                                           password=obj.data.get('password'))
-#             return Response(status=status.HTTP_202_ACCEPTED, data={})
-#         return Response(status=status.HTTP_400_BAD_REQUEST, data=obj.errors)
-
-
-# class UserListApiView(views.APIView):
-#     pass

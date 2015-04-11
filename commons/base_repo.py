@@ -29,3 +29,15 @@ def update(model_object, pk, **kwargs):
 
 def create(model, **kwargs):
     return model.objects.create(**kwargs)
+
+
+def filter(model, **kwargs):
+    limit = kwargs.pop('limit', 20)
+    offset = kwargs.pop('offset', 0)
+    return model.objects.filter(**kwargs)[offset:limit + 1]
+
+
+def count(model, **kwargs):
+    if kwargs:
+        return model.objects.filter(**kwargs).count()
+    return model.objects.count()

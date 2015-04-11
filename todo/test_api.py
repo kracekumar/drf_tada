@@ -114,6 +114,72 @@ class TodoBucketApiTestCase(BaseApiTestCase):
 
         assert resp.status_code == status.HTTP_403_FORBIDDEN
 
+    def test_todo_bucket_read_detail_when_doesnt_exists(self):
+        pk = 23
+        url = reverse('todo-bucket-detail', args=[pk])
+
+        resp = self.client.get(url, format='json')
+
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_todo_bucket_list(self):
+        url = reverse('todo-bucket-list')
+
+        for i in range(5):
+            data = {'title': 'title {}'.format(i)}
+            resp = self.client.post(url, format='json', data=data)
+            assert resp.status_code == status.HTTP_201_CREATED
+
+        resp = self.client.get(url, format='json')
+
+        assert resp.status_code == status.HTTP_200_OK
+
+        assert resp.data['meta']
+        assert resp.data['meta']['limit'] == 20
+        assert resp.data['meta']['offset'] == 0
+        assert resp.data['meta']['total'] == 5
+
+        assert resp.data['objects']
+        assert len(resp.data['objects']) == 5
+
+    def test_todo_bucket_list_with_custom_offset_limit(self):
+        offset, limit = 1, 3
+        url = reverse('todo-bucket-list')
+        url = url + '?limit={}&offset={}'.format(limit, offset)
+
+        for i in range(5):
+            data = {'title': 'title {}'.format(i)}
+            resp = self.client.post(url, format='json', data=data)
+            assert resp.status_code == status.HTTP_201_CREATED
+
+        resp = self.client.get(url, format='json')
+
+        assert resp.status_code == status.HTTP_200_OK
+
+        assert resp.data['meta']
+        assert resp.data['meta']['limit'] == limit
+        assert resp.data['meta']['offset'] == offset
+        assert resp.data['meta']['total'] == 5
+
+        assert resp.data['objects']
+        assert len(resp.data['objects']) == limit
+
+        for index, obj in enumerate(resp.data['objects']):
+            assert obj['id'] == index + offset + 1
+
+    def test_todo_bucket_list_without_login(self):
+        client = APIClient()
+        url = reverse('todo-bucket-list')
+
+        for i in range(5):
+            data = {'title': 'title {}'.format(i)}
+            resp = self.client.post(url, format='json', data=data)
+            assert resp.status_code == status.HTTP_201_CREATED
+
+        resp = client.get(url, format='json')
+
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+
     # def test_change_password(self):
     #     url = reverse('change-password', args=[self.user.pk])
 

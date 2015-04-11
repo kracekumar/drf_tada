@@ -12,3 +12,22 @@ class TodoBucketEntity(DictMixin, UpdateMixin):
                  modified=None):
         """TodoBucket Entity
         """
+
+
+class TodoBucketListEntity(object):
+    @set_init_args
+    def __init__(self, meta, objects):
+        """
+        param objects: `List` of `TodoBucketEntity`
+        param meta: `dict` containing metadata about the `TodoBucket`
+        """
+
+    def to_dict(self):
+        assert isinstance(self.meta, dict)
+
+        data = {}
+
+        data['meta'] = self.meta
+        data['object'] = [obj.to_dict() for obj in self.objects]
+
+        return data

@@ -2,7 +2,7 @@
 
 import copy
 
-from .todo_bucket_entity import TodoBucketEntity
+from .todo_bucket_entity import TodoBucketEntity, TodoBucketListEntity
 from . import todo_repo
 
 
@@ -25,6 +25,17 @@ def create(todo_bucket_entity):
 def get(pk):
     obj = todo_repo.get(pk=pk)
     return _create_entity(obj=obj)
+
+
+def get_objects(user_id, limit, offset):
+    objects = todo_repo.get_objects(owner_id=user_id,
+                                    limit=limit,
+                                    offset=offset)
+    total = todo_repo.count(owner_id=user_id)
+    meta = {'total': total, 'limit': limit, 'offset': offset}
+    entities = [_create_entity(obj) for obj in objects]
+    entity = TodoBucketListEntity(meta=meta, objects=entities)
+    return entity
 
 
 def _create_entity(obj):
