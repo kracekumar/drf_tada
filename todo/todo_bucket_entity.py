@@ -14,7 +14,7 @@ class TodoBucketEntity(DictMixin, UpdateMixin):
         """
 
 
-class TodoBucketListEntity(object):
+class TodoBucketListEntity:
     @set_init_args
     def __init__(self, meta, objects):
         """

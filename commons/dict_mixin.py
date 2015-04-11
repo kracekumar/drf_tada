@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class DictMixin(object):
+class DictMixin:
     """DictMixin is for converting object to dict and creating object from dict.
     """
     def to_dict(self, ignore_fields=None, ignore_underscore_fields=True):
