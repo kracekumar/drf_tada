@@ -72,19 +72,19 @@ class TodoBucketDetailApiView(views.APIView):
                                                 user_id=request.user.id)
         return make_response(obj=entity)
 
-#     @handle_doesnt_exists_exception
-#     def patch(self, request, pk):
-#         user_entity = user_interactors.get(pk=pk)
-#         data = request.DATA
-#         user_entity.bulk_update(**data)
-#         obj = UserUpdateSerializer(data=user_entity.to_dict())
-#         if obj.is_valid():
-#             # Update the entities after validation
-#             user_entity.bulk_update(**obj.data)
-#             new_user_entity = user_interactors.update(
-#                 user_entity, update_fields=obj.data.keys())
-#             resp_obj = UserReadSerializer(instance=new_user_entity)
-#             return Response(status=status.HTTP_202_ACCEPTED,
-#                             data=resp_obj.data)
-#         return Response(status=status.HTTP_400_BAD_REQUEST,
-#                         data=obj.errors)
+    @handle_doesnt_exists_exception
+    def patch(self, request, pk):
+        resp = todo_bucket_interactors.get(pk=pk)
+        data = request.DATA
+        todo_bucket_entity = resp.instance
+        todo_bucket_entity.bulk_update(**data)
+        obj = TodoBucketUpdateSerializer(data=todo_bucket_entity.to_dict())
+        if obj.is_valid():
+            # Update the entities after validation
+            todo_bucket_entity.bulk_update(**obj.data)
+            response = todo_bucket_interactors.update(
+                todo_bucket_entity, update_fields=obj.data.keys())
+            return make_response(obj=response,
+                                 serializer_cls=TodoBucketReadSerializer)
+        return Response(status=status.HTTP_400_BAD_REQUEST,
+                        data=obj.errors)

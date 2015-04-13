@@ -11,7 +11,7 @@ class TodoBucketApiTestCase(BaseApiTestCase):
     def test_todo_bucket_creation(self):
         url = reverse('todo-bucket-list')
         data = {'title': 'Release 0.1',
-                'description': 'List of tasks required to release the proejct',
+                'description': 'List of tasks required to release the project',
                 'is_public': True}
 
         resp = self.client.post(url, format='json', data=data)
@@ -26,7 +26,7 @@ class TodoBucketApiTestCase(BaseApiTestCase):
 
     def test_todo_bucket_creation_without_title(self):
         url = reverse('todo-bucket-list')
-        data = {'description': 'List of tasks required to release the proejct',
+        data = {'description': 'List of tasks required to release the project',
                 'is_public': True}
 
         resp = self.client.post(url, format='json', data=data)
@@ -180,28 +180,42 @@ class TodoBucketApiTestCase(BaseApiTestCase):
 
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
-    # def test_change_password(self):
-    #     url = reverse('change-password', args=[self.user.pk])
+    def test_update_todo_bucket_details(self):
+        url = reverse('todo-bucket-list')
+        data = {'title': 'Release 0.1',
+                'description': 'List of tasks required to release the project',
+                'is_public': True}
 
-    #     data = {'password': 'password'}
+        resp = self.client.post(url, format='json', data=data)
 
-    #     resp = self.client.post(url, data=data, format='json')
+        assert resp.status_code == status.HTTP_201_CREATED
 
-    #     assert resp.status_code == status.HTTP_202_ACCEPTED
+        url = reverse('todo-bucket-detail', args=[resp.data['id']])
 
-    # def test_update_user_details(self):
-    #     url = reverse('user-detail', args=[self.user.pk])
+        new_data = {'title': 'Release 0.2'}
 
-    #     data = {'username': 'Joker'}
+        update_resp = self.client.patch(url, data=new_data, format='json')
 
-    #     resp = self.client.patch(url, data=data, format='json')
+        assert update_resp.status_code == status.HTTP_202_ACCEPTED
 
-    #     assert resp.status_code == status.HTTP_202_ACCEPTED
+        assert update_resp.data['title'] == new_data['title']
 
-    #     expected_data = {'id': self.user.pk,
-    #                      'first_name': self.user.first_name,
-    #                      'last_name': self.user.last_name,
-    #                      'username': data['username'],
-    #                      'email': self.user.email}
+    def test_update_todo_bucket_details_with_invalid_data(self):
+        url = reverse('todo-bucket-list')
+        data = {'title': 'Release 0.1',
+                'description': 'List of tasks required to release the project',
+                'is_public': True}
 
-    #     assert resp.data == expected_data
+        resp = self.client.post(url, format='json', data=data)
+
+        assert resp.status_code == status.HTTP_201_CREATED
+
+        url = reverse('todo-bucket-detail', args=[resp.data['id']])
+
+        new_data = {'is_public': 0.2}
+
+        update_resp = self.client.patch(url, data=new_data, format='json')
+
+        assert update_resp.status_code == status.HTTP_400_BAD_REQUEST
+
+        assert 'is_public' in update_resp.data

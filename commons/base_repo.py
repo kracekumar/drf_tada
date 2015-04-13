@@ -5,7 +5,8 @@ def get(model, pk):
     return model.objects.get(pk=pk)
 
 
-def update(model_object, pk, **kwargs):
+def update(model, pk, **kwargs):
+    model_object = get(model=model, pk=pk)
     all_fields = model_object._meta.get_all_field_names()
     pk_name = model_object._meta.pk.name
     # Don't allow to edit pk name
@@ -22,6 +23,9 @@ def update(model_object, pk, **kwargs):
         if field in all_fields:
             update_fields.append(field)
             setattr(model_object, field, value)
+
+    if 'modified' in all_fields:
+        update_fields.append('modified')
 
     model_object.save(update_fields=update_fields)
     return model_object

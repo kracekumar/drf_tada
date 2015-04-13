@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from functools import partial
 
 from django.contrib.auth import get_user_model
 from commons import base_repo
@@ -21,6 +22,4 @@ def set_password(pk, password):
         return None
 
 
-def update(pk, **kwargs):
-    user = get(pk=pk)
-    return base_repo.update(model_object=user, pk=pk, **kwargs)
+update = partial(base_repo.update, model=User)
