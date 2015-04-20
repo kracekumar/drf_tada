@@ -15,6 +15,7 @@ from commons.serializers import ListQueryParamsSerializer
 from interactors import todo_bucket_interactors
 
 # current app imports
+from .permissions import TodoBucketDetailPermission, TodoBucketListPermission
 from .todo_bucket_entity import TodoBucketEntity
 from .serializers import (TodoBucketWriteSerializer, TodoBucketReadSerializer,
                           TodoBucketUpdateSerializer, TodoBucketListSerializer)
@@ -22,7 +23,7 @@ from .serializers import (TodoBucketWriteSerializer, TodoBucketReadSerializer,
 
 class TodoBucketListApiView(views.APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [LoggedInPermission]
+    permission_classes = [LoggedInPermission, TodoBucketListPermission]
 
     def post(self, request):
         data = request.DATA
@@ -58,23 +59,22 @@ class TodoBucketListApiView(views.APIView):
 
 class TodoBucketDetailApiView(views.APIView):
     authentication_classes = [TokenAuthentication]
+    permission_classes = [TodoBucketDetailPermission]
 
     @handle_doesnt_exists_exception
-    def get(self, request, pk):
-        entity = todo_bucket_interactors.get(pk=pk,
-                                             user_id=request.user.id)
+    def get(self, request, todo_bucket_pk):
+        entity = todo_bucket_interactors.get(pk=todo_bucket_pk)
         return make_response(obj=entity,
                              serializer_cls=TodoBucketReadSerializer)
 
     @handle_doesnt_exists_exception
-    def delete(self, request, pk):
-        entity = todo_bucket_interactors.delete(pk=pk,
-                                                user_id=request.user.id)
+    def delete(self, request, todo_bucket_pk):
+        entity = todo_bucket_interactors.delete(pk=todo_bucket_pk)
         return make_response(obj=entity)
 
     @handle_doesnt_exists_exception
-    def patch(self, request, pk):
-        resp = todo_bucket_interactors.get(pk=pk)
+    def patch(self, request, todo_bucket_pk):
+        resp = todo_bucket_interactors.get(pk=todo_bucket_pk)
         data = request.DATA
         todo_bucket_entity = resp.instance
         todo_bucket_entity.bulk_update(**data)
@@ -83,7 +83,8 @@ class TodoBucketDetailApiView(views.APIView):
             # Update the entities after validation
             todo_bucket_entity.bulk_update(**obj.data)
             response = todo_bucket_interactors.update(
-                todo_bucket_entity, update_fields=obj.data.keys())
+                todo_bucket_entity,
+                update_fields=obj.data.keys())
             return make_response(obj=response,
                                  serializer_cls=TodoBucketReadSerializer)
         return Response(status=status.HTTP_400_BAD_REQUEST,

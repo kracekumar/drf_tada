@@ -6,6 +6,18 @@
 from rest_framework import serializers
 
 
+class IdSerializerMixin(serializers.Serializer):
+    id = serializers.IntegerField(source='pk')
+
+
+class TitleSerializerMixin(serializers.Serializer):
+    title = serializers.CharField(max_length=255, required=True)
+
+
+class IdTitleSerializerMixin(IdSerializerMixin, TitleSerializerMixin):
+    pass
+
+
 class TimeStampedSerializerMixin(serializers.Serializer):
     created = serializers.DateTimeField(format='%s')
     modified = serializers.DateTimeField(format='%s')

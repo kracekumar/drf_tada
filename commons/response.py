@@ -35,7 +35,8 @@ def make_response(obj, serializer_cls=None):
     """
     is_repsonse_obj = isinstance(obj, BusinessResponse)
     is_serializer_obj = isinstance(obj, serializers.Serializer)
-    assert is_repsonse_obj or is_serializer_obj
+    msg = "`{}` is not `BusinessResponse` or `Serializer`".format(obj)
+    assert is_repsonse_obj or is_serializer_obj, msg
 
     if is_repsonse_obj:
         return _make_response_from_business_response(
@@ -65,7 +66,6 @@ resource_status_mapping = {
 
 # helper/internal functions
 def _make_response_from_business_response(obj, serializer_cls):
-    assert serializer_cls
 
     _status = resource_status_mapping.get(obj.action)
 
@@ -73,8 +73,10 @@ def _make_response_from_business_response(obj, serializer_cls):
         if not obj.instance:
             return Response(status=_status)
 
-        instance = serializer_cls(instance=obj.instance)
-        return Response(status=_status, data=instance.data)
+        if serializer_cls:
+            instance = serializer_cls(instance=obj.instance)
+            return Response(status=_status, data=instance.data)
+        return Response(status=_status)
     else:
         if obj.action == BusinessAction.RESOURCE_ACCESS_DENIED:
             return Response(status=_status)

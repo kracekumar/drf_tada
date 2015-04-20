@@ -5,7 +5,6 @@
 
 from commons.response import BusinessResponse, BusinessAction
 from todo import todo_bucket_service
-from todo import permissions
 
 
 def create(todo_bucket_entity):
@@ -15,25 +14,16 @@ def create(todo_bucket_entity):
     return instance
 
 
-def get(pk, user_id=None):
+def get(pk):
     entity = todo_bucket_service.get(pk=pk)
-    if permissions.can_access(todo_bucket_entity=entity, user_id=user_id):
-        instance = BusinessResponse(is_success=True, instance=entity,
-                                    action=BusinessAction.RESOURCE_READ)
-    else:
-        instance = BusinessResponse(
-            is_success=False, action=BusinessAction.RESOURCE_ACCESS_DENIED)
-    return instance
+    return BusinessResponse(is_success=True, instance=entity,
+                            action=BusinessAction.RESOURCE_READ)
 
 
-def delete(pk, user_id=None):
-    entity = todo_bucket_service.get(pk=pk)
-    if permissions.can_delete(todo_bucket_entity=entity, user_id=user_id):
-        todo_bucket_service.delete(pk=pk)
-        return BusinessResponse(is_success=True,
-                                action=BusinessAction.RESOURCE_DELETED)
-    return BusinessResponse(is_success=False,
-                            action=BusinessAction.RESOURCE_ACCESS_DENIED)
+def delete(pk):
+    todo_bucket_service.delete(pk=pk)
+    return BusinessResponse(is_success=True,
+                            action=BusinessAction.RESOURCE_DELETED)
 
 
 def get_objects(user_id, limit=20, offset=0):

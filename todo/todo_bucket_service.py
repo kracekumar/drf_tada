@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- codinog: utf-8 -*-
 
 from .todo_bucket_entity import TodoBucketEntity, TodoBucketListEntity
 from . import todo_repo
@@ -16,12 +16,17 @@ def create(todo_bucket_entity):
 
     obj = todo_repo.create(**kwargs)
 
-    return _create_entity(obj=obj)
+    return create_entity(obj=obj)
 
 
 def get(pk):
     obj = todo_repo.get(pk=pk)
-    return _create_entity(obj=obj)
+    return create_entity(obj=obj)
+
+
+def delete(pk):
+    todo_repo.delete(pk=pk)
+    return True
 
 
 def get_objects(user_id, limit, offset):
@@ -30,7 +35,7 @@ def get_objects(user_id, limit, offset):
                                     offset=offset)
     total = todo_repo.count(owner_id=user_id)
     meta = {'total': total, 'limit': limit, 'offset': offset}
-    entities = [_create_entity(obj) for obj in objects]
+    entities = [create_entity(obj) for obj in objects]
     entity = TodoBucketListEntity(meta=meta, objects=entities)
     return entity
 
@@ -40,11 +45,11 @@ def update(pk, title=_sentinel, description=_sentinel, is_public=_sentinel):
     obj = todo_repo.update(**fields)
 
     if obj:
-        return _create_entity(obj=obj)
+        return create_entity(obj=obj)
     return None
 
 
-def _create_entity(obj):
+def create_entity(obj):
     return TodoBucketEntity(pk=obj.pk, title=obj.title,
                             description=obj.description,
                             created_by=obj.owner_id,

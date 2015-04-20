@@ -38,10 +38,14 @@ def create(model, **kwargs):
 def filter(model, **kwargs):
     limit = kwargs.pop('limit', 20)
     offset = kwargs.pop('offset', 0)
-    return model.objects.filter(**kwargs)[offset:limit + 1]
+    return model.objects.filter(**kwargs)[offset:limit]
 
 
 def count(model, **kwargs):
     if kwargs:
         return model.objects.filter(**kwargs).count()
     return model.objects.count()
+
+
+def delete(model, pk):
+    return get(model=model, pk=pk).delete()

@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'user',
     'todo',
+    'task',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'commons.middleware.CustomExceptionHandler',
 )
 
 ROOT_URLCONF = 'drf_tada.urls'

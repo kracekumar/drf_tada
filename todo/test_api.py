@@ -112,7 +112,7 @@ class TodoBucketApiTestCase(BaseApiTestCase):
 
         resp = client.get(url, format='json')
 
-        assert resp.status_code == status.HTTP_403_FORBIDDEN
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_todo_bucket_read_detail_when_doesnt_exists(self):
         pk = 23
@@ -143,7 +143,7 @@ class TodoBucketApiTestCase(BaseApiTestCase):
         assert len(resp.data['objects']) == 5
 
     def test_todo_bucket_list_with_custom_offset_limit(self):
-        offset, limit = 1, 3
+        offset, limit = 0, 3
         url = reverse('todo-bucket-list')
         url = url + '?limit={}&offset={}'.format(limit, offset)
 

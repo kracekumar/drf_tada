@@ -5,7 +5,8 @@ from django.contrib import admin
 from user.views import (UserDetailApiView, UserListApiView,
                         UserChangePasswordApiView)
 from todo.views import (TodoBucketListApiView, TodoBucketDetailApiView)
-
+from task.views import (TaskListApiView, TaskDetailApiView, NoteListApiView,
+                        NoteDetailApiView)
 
 admin.autodiscover()
 
@@ -20,6 +21,19 @@ urlpatterns = patterns('',
     url(r'^users/(?P<pk>[0-9]+)/$', UserDetailApiView.as_view(), name='user-detail'),
     url(r'^todo_bucket/$', TodoBucketListApiView.as_view(),
         name='todo-bucket-list'),
-    url(r'^todo_bucket/(?P<pk>[0-9]+)/$', TodoBucketDetailApiView.as_view(),
+    url(r'^todo_bucket/(?P<todo_bucket_pk>[0-9]+)/$', TodoBucketDetailApiView.as_view(),
         name='todo-bucket-detail'),
+    url(r'^todo_bucket/(?P<todo_bucket_pk>[0-9]+)/tasks/$',
+        TaskListApiView.as_view(),
+        name='task-list'),
+    url(r'^todo_bucket/(?P<todo_bucket_pk>[0-9]+)/tasks/(?P<task_pk>[0-9]+)/$',
+        TaskDetailApiView.as_view(),
+        name='task-detail'),
+    url(r'^todo_bucket/(?P<todo_bucket_pk>[0-9]+)/tasks/(?P<task_pk>[0-9]+)/notes/$',
+        NoteListApiView.as_view(),
+        name='note-list'),
+    url(r'^todo_bucket/(?P<todo_bucket_pk>[0-9]+)/tasks/(?P<task_pk>[0-9]+)/notes/(?P<note_pk>[0-9]+)/$',
+        NoteDetailApiView.as_view(),
+        name='note-detail'),
+
 )
