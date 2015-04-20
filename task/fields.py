@@ -9,4 +9,6 @@ class NoteResourceUriField(ResourceUriField):
         if request.method == "POST":
             return '{}{}/'.format(request.path, value.pk)
         else:
-            return request.path
+            if 'notes' in request.path:
+                return request.path
+            return '{}notes/{}/'.format(request.path, value.pk)
