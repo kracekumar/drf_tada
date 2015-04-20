@@ -52,7 +52,7 @@ http://localhost:8002/users/1/
 
 #### Todo Bucket
 
-```
+```json
 http://localhost:8002/todo_bucket/
 
 {
@@ -158,7 +158,7 @@ http://localhost:8002/todo_bucket/
 
 #### Todo Bucket details
 
-```
+```json
 http://localhost:8002/todo_bucket/1/
 
 {
@@ -223,7 +223,7 @@ http://localhost:8002/todo_bucket/1/tasks/
 
 #### Task details
 
-```
+```json
 http://localhost:8002/todo_bucket/2/tasks/5/
 
 {
@@ -313,7 +313,7 @@ http://localhost:8002/todo_bucket/2/tasks/5/
 
 #### Note Detail
 
-```
+```json
 http://localhost:8002/todo_bucket/2/tasks/5/notes/1/
 
 {
