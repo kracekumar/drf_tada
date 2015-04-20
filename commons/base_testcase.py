@@ -6,6 +6,7 @@ from rest_framework.test import APIClient, APITestCase
 
 class BaseApiTestCase(APITestCase):
     def setUp(self):
+        super().setUp()
         User = get_user_model()
         self.email = "johndoe@example.com"
         self.first_name = 'John'
