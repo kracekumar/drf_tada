@@ -209,9 +209,9 @@ http://localhost:8002/todo_bucket/1/tasks/
 
 #### Task details
 
-`
-``
-json
+
+```json
+
 http: //localhost:8002/todo_bucket/2/tasks/5/
 
     {
