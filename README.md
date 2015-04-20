@@ -38,7 +38,7 @@ Note is small information on task like `paid via NetBanking`.
 ### Examples
 
 #### List User Details
-```
+```json
 http://localhost:8002/users/1/
 
 {
