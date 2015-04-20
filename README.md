@@ -323,3 +323,8 @@ in the request header.
 
 - Come up helper function to reduce number of operations in update functions.
 - Use `namedtuple` rather than class for `BusinessResponse`.
+
+### How to run test
+
+- `export DJANGO_SETTINGS_MODULE='drf_tada.settings'`
+- `export PYTHONPATH='.'; py.test`
