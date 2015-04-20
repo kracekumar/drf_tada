@@ -163,7 +163,7 @@ http://localhost:8002/todo_bucket/1/
 
 #### List of tasks in Todo Bucket
 
-```
+```json
 http://localhost:8002/todo_bucket/1/tasks/
 
 {
@@ -204,8 +204,7 @@ http://localhost:8002/todo_bucket/1/tasks/
         "created_by": 1
     }]
 }
-``
-`
+```
 
 #### Task details
 
