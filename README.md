@@ -305,12 +305,12 @@ http://localhost:8002/todo_bucket/2/tasks/5/notes/1/
 
 ### Jargon
 
-- Interactor
-- Service
-- BusinessResponse
-- Repo
+- Interactor - Business Orchestrator
+- Service - Responsible to interact with Interactor and Repo. Mostly converting entity to dict for DB.
+- BusinessResponse - Response originating from Interactor to view.
+- Repo - Master of DB operations.
 
-### Posting
+### Request
 
 All the request requires `token` to access the details. You need to add
 ```
@@ -318,3 +318,8 @@ Authorization: Token <token>
 Content-Type: application/json
 ```
 in the request header.
+
+### Improvements
+
+- Come up helper function to reduce number of operations in update functions.
+- Use `namedtuple` rather than class for `BusinessResponse`.
