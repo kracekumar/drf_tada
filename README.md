@@ -42,11 +42,11 @@ Note is small information on task like `paid via NetBanking`.
 http://localhost:8002/users/1/
 
 {
-"id": 1,
-"email": "k@k.com",
-"username": "kracekumar",
-"first_name": "foo",
-"last_name": "foo"
+    "id": 1,
+    "email": "k@k.com",
+    "username": "kracekumar",
+    "first_name": "foo",
+    "last_name": "foo"
 }
 ```
 
@@ -56,103 +56,92 @@ http://localhost:8002/users/1/
 http://localhost:8002/todo_bucket/
 
 {
-"meta": {
-"limit": 20,
-"offset": 0,
-"total": 10
-},
-"objects": [
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428611510",
-"modified": "1428611510",
-"id": 1,
-"created_by": 1
-},
-{
-"title": "Coding 1",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428611747",
-"modified": "1428954227",
-"id": 2,
-"created_by": 1
-},
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428611754",
-"modified": "1428611754",
-"id": 3,
-"created_by": 1
-},
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428740561",
-"modified": "1428740561",
-"id": 4,
-"created_by": 1
-},
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428740637",
-"modified": "1428740637",
-"id": 5,
-"created_by": 1
-},
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428740741",
-"modified": "1428740741",
-"id": 6,
-"created_by": 1
-},
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": true,
-"created": "1428740775",
-"modified": "1428740775",
-"id": 7,
-"created_by": 1
-},
-{
-"title": "coding",
-"description": "List of items I want to do in programming",
-"is_public": false,
-"created": "1428740806",
-"modified": "1428740806",
-"id": 8,
-"created_by": 1
-},
-{
-"title": "Ambitions",
-"description": "Amitious projects",
-"is_public": false,
-"created": "1428771606",
-"modified": "1428771606",
-"id": 9,
-"created_by": 1
-},
-{
-"title": "World tour",
-"description": "places to visit",
-"is_public": false,
-"created": "1428771624",
-"modified": "1428771624",
-"id": 10,
-"created_by": 1
-}
-]
+    "meta": {
+        "limit": 20,
+        "offset": 0,
+        "total": 10
+    },
+    "objects": [{
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428611510",
+        "modified": "1428611510",
+        "id": 1,
+        "created_by": 1
+    }, {
+        "title": "Coding 1",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428611747",
+        "modified": "1428954227",
+        "id": 2,
+        "created_by": 1
+    }, {
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428611754",
+        "modified": "1428611754",
+        "id": 3,
+        "created_by": 1
+    }, {
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428740561",
+        "modified": "1428740561",
+        "id": 4,
+        "created_by": 1
+    }, {
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428740637",
+        "modified": "1428740637",
+        "id": 5,
+        "created_by": 1
+    }, {
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428740741",
+        "modified": "1428740741",
+        "id": 6,
+        "created_by": 1
+    }, {
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": true,
+        "created": "1428740775",
+        "modified": "1428740775",
+        "id": 7,
+        "created_by": 1
+    }, {
+        "title": "coding",
+        "description": "List of items I want to do in programming",
+        "is_public": false,
+        "created": "1428740806",
+        "modified": "1428740806",
+        "id": 8,
+        "created_by": 1
+    }, {
+        "title": "Ambitions",
+        "description": "Amitious projects",
+        "is_public": false,
+        "created": "1428771606",
+        "modified": "1428771606",
+        "id": 9,
+        "created_by": 1
+    }, {
+        "title": "World tour",
+        "description": "places to visit",
+        "is_public": false,
+        "created": "1428771624",
+        "modified": "1428771624",
+        "id": 10,
+        "created_by": 1
+    }]
 }
 ```
 
